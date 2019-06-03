@@ -1,16 +1,16 @@
-const { createLogger, transports, format } = require('winston');
+const { createLogger, transports } = require('winston');
 
 const logger = createLogger({
   transports: [
     new transports.Console({
       handleExceptions: true,
-      colorize: true
-    })
-  ]
+      colorize: true,
+    }),
+  ],
 });
 
 logger.stream = {
-  write: (message) => logger.info(message)
+  write: (message) => logger.info(message),
 };
 
 module.exports = logger;

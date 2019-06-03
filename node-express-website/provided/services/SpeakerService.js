@@ -1,5 +1,5 @@
-const fs = require("fs");
-const util = require("util");
+const fs = require('fs');
+const util = require('util');
 
 /**
  * We want to use async/await with fs.readFile - util.promisfy gives us that
@@ -25,9 +25,9 @@ class SpeakerService {
     const data = await this.getData();
 
     // We are using map() to transform the array we get into another one
-    const namesArray = data.map(speaker => ({
+    const namesArray = data.map((speaker) => ({
       name: speaker.name,
-      shortname: speaker.shortname
+      shortname: speaker.shortname,
     }));
 
     return namesArray;
@@ -59,7 +59,7 @@ class SpeakerService {
   async getArtworkForSpeaker(shortname) {
     const data = await this.getData();
 
-    const speaker = data.find(elm => elm.shortname === shortname);
+    const speaker = data.find((elm) => elm.shortname === shortname);
     if (!speaker || !speaker.artwork) return null;
 
     return speaker.artwork;
@@ -72,14 +72,14 @@ class SpeakerService {
   async getSpeaker(shortname) {
     const data = await this.getData();
 
-    const speaker = data.find(elm => elm.shortname === shortname);
+    const speaker = data.find((elm) => elm.shortname === shortname);
     if (!speaker) return null;
 
     const speakerData = {
       title: speaker.title,
       name: speaker.name,
       shortname: speaker.shortname,
-      description: speaker.description
+      description: speaker.description,
     };
 
     return speakerData;
@@ -91,13 +91,11 @@ class SpeakerService {
   async getListShort() {
     const data = await this.getData();
 
-    const shortDataArray = data.map(speaker => {
-      return {
-        name: speaker.name,
-        shortname: speaker.shortname,
-        title: speaker.title
-      };
-    });
+    const shortDataArray = data.map((speaker) => ({
+      name: speaker.name,
+      shortname: speaker.shortname,
+      title: speaker.title,
+    }));
 
     return shortDataArray;
   }
@@ -108,11 +106,11 @@ class SpeakerService {
   async getList() {
     const data = await this.getData();
 
-    const longDataArray = data.map(speaker => ({
+    const longDataArray = data.map((speaker) => ({
       name: speaker.name,
       shortname: speaker.shortname,
       title: speaker.title,
-      summary: speaker.summary
+      summary: speaker.summary,
     }));
 
     return longDataArray;
@@ -122,7 +120,7 @@ class SpeakerService {
    * Fetches speakers data from the JSON file provided to the constructor
    */
   async getData() {
-    const data = await readFile(this.datafile, "utf8");
+    const data = await readFile(this.datafile, 'utf8');
 
     const parsedData = data ? JSON.parse(data) : [];
 
