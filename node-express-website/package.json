@@ -1,0 +1,13 @@
+{
+  "name": "node-express-website",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "Dmitry White",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
