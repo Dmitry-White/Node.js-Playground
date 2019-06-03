@@ -35,7 +35,10 @@ class FeedbackService {
     const data = await this.getData();
 
     data.unshift({
-      name, email, title, message,
+      name,
+      email,
+      title,
+      message,
     });
     const result = writeFile(this.datafile, JSON.stringify(data));
 
