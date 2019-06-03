@@ -25,9 +25,12 @@ class SpeakerService {
     const data = await this.getData();
 
     // We are using map() to transform the array we get into another one
-    return data.map(speaker => {
-      return { name: speaker.name, shortname: speaker.shortname };
-    });
+    const namesArray = data.map(speaker => ({
+      name: speaker.name,
+      shortname: speaker.shortname
+    }));
+
+    return namesArray;
   }
 
   /**
@@ -38,14 +41,15 @@ class SpeakerService {
 
     // Array.reduce() is used to traverse all speakers and
     // create an array that contains all artwork
-    const artwork = data.reduce((acc, elm) => {
+    const artworkArray = data.reduce((acc, elm) => {
       if (elm.artwork) {
         // eslint-disable-next-line no-param-reassign
         acc = [...acc, ...elm.artwork];
       }
       return acc;
     }, []);
-    return artwork;
+
+    return artworkArray;
   }
 
   /**
@@ -54,10 +58,10 @@ class SpeakerService {
    */
   async getArtworkForSpeaker(shortname) {
     const data = await this.getData();
-    const speaker = data.find(elm => {
-      return elm.shortname === shortname;
-    });
+
+    const speaker = data.find(elm => elm.shortname === shortname);
     if (!speaker || !speaker.artwork) return null;
+
     return speaker.artwork;
   }
 
@@ -67,16 +71,18 @@ class SpeakerService {
    */
   async getSpeaker(shortname) {
     const data = await this.getData();
-    const speaker = data.find(elm => {
-      return elm.shortname === shortname;
-    });
+
+    const speaker = data.find(elm => elm.shortname === shortname);
     if (!speaker) return null;
-    return {
+
+    const speakerData = {
       title: speaker.title,
       name: speaker.name,
       shortname: speaker.shortname,
       description: speaker.description
     };
+
+    return speakerData;
   }
 
   /**
@@ -84,13 +90,16 @@ class SpeakerService {
    */
   async getListShort() {
     const data = await this.getData();
-    return data.map(speaker => {
+
+    const shortDataArray = data.map(speaker => {
       return {
         name: speaker.name,
         shortname: speaker.shortname,
         title: speaker.title
       };
     });
+
+    return shortDataArray;
   }
 
   /**
@@ -98,14 +107,15 @@ class SpeakerService {
    */
   async getList() {
     const data = await this.getData();
-    return data.map(speaker => {
-      return {
-        name: speaker.name,
-        shortname: speaker.shortname,
-        title: speaker.title,
-        summary: speaker.summary
-      };
-    });
+
+    const longDataArray = data.map(speaker => ({
+      name: speaker.name,
+      shortname: speaker.shortname,
+      title: speaker.title,
+      summary: speaker.summary
+    }));
+
+    return longDataArray;
   }
 
   /**
@@ -113,7 +123,10 @@ class SpeakerService {
    */
   async getData() {
     const data = await readFile(this.datafile, "utf8");
-    return JSON.parse(data).speakers;
+
+    const parsedData = data ? JSON.parse(data) : [];
+
+    return parsedData;
   }
 }
 

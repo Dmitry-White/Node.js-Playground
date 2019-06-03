@@ -21,6 +21,7 @@ class FeedbackService {
    */
   async getList() {
     const data = await this.getData();
+    
     return data;
   }
 
@@ -31,9 +32,12 @@ class FeedbackService {
    * @param {*} message The feedback message
    */
   async addEntry(name, email, title, message) {
-    const data = (await this.getData()) || [];
+    const data = await this.getData();
+
     data.unshift({ name, email, title, message });
-    return writeFile(this.datafile, JSON.stringify(data));
+    const result = writeFile(this.datafile, JSON.stringify(data));
+
+    return result;
   }
 
   /**
@@ -41,8 +45,10 @@ class FeedbackService {
    */
   async getData() {
     const data = await readFile(this.datafile, 'utf8');
-    if (!data) return [];
-    return JSON.parse(data);
+
+    const parsedData = data ? JSON.parse(data) : [];
+
+    return parsedData;
   }
 }
 
