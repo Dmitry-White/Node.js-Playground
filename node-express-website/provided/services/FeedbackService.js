@@ -21,7 +21,7 @@ class FeedbackService {
    */
   async getList() {
     const data = await this.getData();
-    
+
     return data;
   }
 
@@ -34,7 +34,9 @@ class FeedbackService {
   async addEntry(name, email, title, message) {
     const data = await this.getData();
 
-    data.unshift({ name, email, title, message });
+    data.unshift({
+      name, email, title, message,
+    });
     const result = writeFile(this.datafile, JSON.stringify(data));
 
     return result;
