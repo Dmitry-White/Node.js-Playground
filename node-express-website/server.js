@@ -15,7 +15,7 @@ app.use(morgan('short', { stream: logger.stream }));
 app.use(express.static(path.join(__dirname, './static')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './static/index.html'));
+  res.render('pages/index', { pageTitle: 'Welcome' });
 });
 
 app.get('/speakers', (req, res) => {
