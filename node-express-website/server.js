@@ -7,6 +7,9 @@ const logger = require('./services/logger');
 const app = express();
 const port = 3000;
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, './views'));
+
 app.use(morgan('short', { stream: logger.stream }));
 
 app.use(express.static(path.join(__dirname, './static')));
