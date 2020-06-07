@@ -19,10 +19,12 @@ app.set('trust proxy', 1);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views'));
 
-app.use(cookieSession({
-  name: 'session',
-  keys: ['DkgsdgIGsDgiksdbgsdkS', 'ADGDSgiusdgjHSBd']
-}));
+app.use(
+  cookieSession({
+    name: 'session',
+    keys: ['DkgsdgIGsDgiksdbgsdkS', 'ADGDSgiusdgjHSBd'],
+  }),
+);
 
 app.use(morgan('short', { stream: logger.stream }));
 
