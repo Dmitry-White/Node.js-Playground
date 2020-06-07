@@ -7,7 +7,7 @@ const router = express.Router();
 
 const indexRoute = (params) => {
   router.get('/', (req, res) => {
-    res.render('pages/index', { pageTitle: 'Welcome' });
+    res.render('layout', { pageTitle: 'Welcome', template: 'index' });
   });
 
   router.use('/feedback', feedbackRoute(params));
