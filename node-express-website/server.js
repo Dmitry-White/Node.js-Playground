@@ -32,6 +32,21 @@ app.use(morgan('short', { stream: logger.stream }));
 
 app.use(express.static(path.join(__dirname, './static')));
 
+app.use(async (req, res, next) => {
+  try {
+    const speakers = await speakersService.getNames();
+
+    app.locals.speakers = speakers;
+    logger.info(speakers);
+
+    return next();
+  } catch (error) {
+    logger.error(error);
+
+    return next(error);
+  }
+});
+
 app.use(
   '/',
   routes({
