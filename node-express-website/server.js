@@ -34,10 +34,10 @@ app.use(express.static(path.join(__dirname, './static')));
 
 app.use(async (req, res, next) => {
   try {
-    const speakers = await speakersService.getNames();
+    const speakerNames = await speakersService.getNames();
 
-    app.locals.speakers = speakers;
-    logger.info(speakers);
+    app.locals.speakerNames = speakerNames;
+    logger.info(speakerNames);
 
     return next();
   } catch (error) {
