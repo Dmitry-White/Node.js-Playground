@@ -10,9 +10,8 @@ const router = express.Router();
 const indexRoute = (params) => {
   router.get('/', async (req, res) => {
     const { speakersService } = params;
+
     const topSpeakers = await speakersService.getList();
-    
-    logger.info(topSpeakers);
 
     res.render('layout', { pageTitle: 'Welcome', template: 'index', topSpeakers });
   });

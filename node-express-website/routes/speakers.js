@@ -7,7 +7,8 @@ const speakersRoute = (params) => {
 
   router.get('/', async (req, res) => {
     const speakers = await speakersService.getList();
-    return res.json(speakers);
+
+    res.render('layout', { pageTitle: 'Speakers', template: 'speakers', speakers });
   });
 
   router.get('/:shortname', (req, res) => {
