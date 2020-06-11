@@ -21,7 +21,7 @@ const speakersRoute = (params) => {
 
     logger.info(speaker);
 
-    return res.json(speaker);
+    res.render('layout', { pageTitle: speaker.name, template: 'speaker-details', speaker });
   });
 
   return router;
