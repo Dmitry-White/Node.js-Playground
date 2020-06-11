@@ -1,5 +1,7 @@
 const express = require('express');
 
+const logger = require('../services/logger');
+
 const router = express.Router();
 
 const speakersRoute = (params) => {
@@ -8,11 +10,18 @@ const speakersRoute = (params) => {
   router.get('/', async (req, res) => {
     const speakers = await speakersService.getList();
 
+    logger.info(speakers);
+
     res.render('layout', { pageTitle: 'Speakers', template: 'speakers', speakers });
   });
 
-  router.get('/:shortname', (req, res) => {
-    return res.send(`Detail page of ${req.params.shortname}`);
+  router.get('/:shortname', async (req, res) => {
+    const { shortname } = req.params;
+    const speaker = await speakersService.getSpeaker(shortname);
+
+    logger.info(speaker);
+
+    return res.json(speaker);
   });
 
   return router;
