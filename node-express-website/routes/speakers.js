@@ -21,7 +21,11 @@ const speakersRoute = (params) => {
 
     logger.info(speaker);
 
-    res.render('layout', { pageTitle: speaker.name, template: 'speaker-details', speaker });
+    const artworks = await speakersService.getArtworkForSpeaker(shortname);
+
+    logger.info(artworks);
+
+    res.render('layout', { pageTitle: speaker.name, template: 'speaker-details', speaker, artworks });
   });
 
   return router;
