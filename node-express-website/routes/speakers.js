@@ -12,7 +12,11 @@ const speakersRoute = (params) => {
 
     logger.info(speakers);
 
-    res.render('layout', { pageTitle: 'Speakers', template: 'speakers', speakers });
+    const artworks = await speakersService.getAllArtwork();
+
+    logger.info(artworks);
+
+    res.render('layout', { pageTitle: 'Speakers', template: 'speakers', speakers, artworks });
   });
 
   router.get('/:shortname', async (req, res) => {
