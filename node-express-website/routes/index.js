@@ -13,7 +13,13 @@ const indexRoute = (params) => {
 
     const topSpeakers = await speakersService.getList();
 
-    res.render('layout', { pageTitle: 'Welcome', template: 'index', topSpeakers });
+    logger.info(topSpeakers);
+
+    const artworks = await speakersService.getAllArtwork();
+
+    logger.info(artworks);
+
+    res.render('layout', { pageTitle: 'Welcome', template: 'index', topSpeakers, artworks });
   });
 
   router.use('/feedback', feedbackRoute(params));
