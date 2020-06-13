@@ -1,5 +1,6 @@
 const express = require('express');
 
+const withError = require('../decorators/withError');
 const logger = require('../services/logger');
 
 const feedbackRoute = require('./feedback');
@@ -8,7 +9,7 @@ const speakersRoute = require('./speakers');
 const router = express.Router();
 
 const indexRoute = (params) => {
-  router.get('/', async (req, res) => {
+  router.get('/', withError(async (req, res) => {
     const { speakersService } = params;
 
     const topSpeakers = await speakersService.getList();
@@ -20,7 +21,7 @@ const indexRoute = (params) => {
     logger.info(artworks);
 
     res.render('layout', { pageTitle: 'Welcome', template: 'index', topSpeakers, artworks });
-  });
+  }));
 
   router.use('/feedback', feedbackRoute(params));
 

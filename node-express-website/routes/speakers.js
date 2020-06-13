@@ -1,5 +1,6 @@
 const express = require('express');
 
+const withError = require('../decorators/withError');
 const logger = require('../services/logger');
 
 const router = express.Router();
@@ -7,7 +8,7 @@ const router = express.Router();
 const speakersRoute = (params) => {
   const { speakersService } = params;
 
-  router.get('/', async (req, res) => {
+  router.get('/', withError(async (req, res) => {
     const speakers = await speakersService.getList();
 
     logger.info(speakers);
@@ -17,9 +18,9 @@ const speakersRoute = (params) => {
     logger.info(artworks);
 
     res.render('layout', { pageTitle: 'Speakers', template: 'speakers', speakers, artworks });
-  });
+  }));
 
-  router.get('/:shortname', async (req, res) => {
+  router.get('/:shortname', withError(async (req, res) => {
     const { shortname } = req.params;
     const speaker = await speakersService.getSpeaker(shortname);
 
@@ -30,7 +31,7 @@ const speakersRoute = (params) => {
     logger.info(artworks);
 
     res.render('layout', { pageTitle: speaker.name, template: 'speaker-details', speaker, artworks });
-  });
+  }));
 
   return router;
 };

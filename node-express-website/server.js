@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cookieSession = require('cookie-session');
 
+const withError = require('./decorators/withError');
 const logErrors = require('./middlewares/logErrors');
 const xhrErrors = require('./middlewares/xhrErrors');
 const errorHandler = require('./middlewares/errorHandler');
@@ -35,18 +36,12 @@ app.use(morgan('short', { stream: logger.stream }));
 
 app.use(express.static(path.join(__dirname, './static')));
 
-app.use(async (req, res, next) => {
-  try {
-    const speakerNames = await speakersService.getNames();
+app.use(withError(async (req, res) => {
+  const speakerNames = await speakersService.getNames();
 
-    app.locals.speakerNames = speakerNames;
-    logger.info(speakerNames);
-
-    return next();
-  } catch (error) {
-    return next(error);
-  }
-});
+  app.locals.speakerNames = speakerNames;
+  logger.info(speakerNames);
+}));
 
 app.use(
   '/',
