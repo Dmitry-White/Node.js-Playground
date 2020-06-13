@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const cookieSession = require('cookie-session');
+const createError = require('http-errors');
 
 const withError = require('./decorators/withError');
 const logErrors = require('./middlewares/logErrors');
@@ -50,6 +51,12 @@ app.use(
     speakersService,
   }),
 );
+
+app.use((req, res, next) => {
+  const error = new createError.NotFound('Page not found!');
+
+  return next(error);
+})
 
 app.use(xhrErrors);
 app.use(logErrors);
