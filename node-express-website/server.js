@@ -3,9 +3,12 @@ const express = require('express');
 const morgan = require('morgan');
 const cookieSession = require('cookie-session');
 
-const logger = require('./services/logger');
+const logErrors = require('./middlewares/logErrors');
+const xhrErrors = require('./middlewares/xhrErrors');
+const errorHandler = require('./middlewares/errorHandler');
 const FeedbackService = require('./services/FeedbackService');
 const SpeakersService = require('./services/SpeakersService');
+const logger = require('./services/logger');
 const routes = require('./routes');
 
 const feedbackService = new FeedbackService('./data/feedback.json');
@@ -41,8 +44,6 @@ app.use(async (req, res, next) => {
 
     return next();
   } catch (error) {
-    logger.error(error);
-
     return next(error);
   }
 });
@@ -54,5 +55,9 @@ app.use(
     speakersService,
   }),
 );
+
+app.use(xhrErrors);
+app.use(logErrors);
+app.use(errorHandler);
 
 app.listen(port, () => logger.info('Example app listening on port port!'));
