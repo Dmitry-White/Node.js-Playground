@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cookieSession = require('cookie-session');
 const createError = require('http-errors');
+const bodyParser = require('body-parser');
 
 const withError = require('./decorators/withError');
 const logErrors = require('./middlewares/logErrors');
@@ -33,6 +34,8 @@ app.use(
   }),
 );
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(morgan('short', { stream: logger.stream }));
 
 app.use(express.static(path.join(__dirname, './static')));
@@ -55,9 +58,12 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  const error = new createError.NotFound('Page not found!');
+  if (!req.route) {
+    const error = new createError.NotFound('Page not found!');
 
-  return next(error);
+    return next(error);
+  }
+  next()
 });
 
 app.use(xhrErrors);
