@@ -1,6 +1,7 @@
 const express = require('express');
 
 const withError = require('../decorators/withError');
+const logger = require('../services/logger');
 
 const router = express.Router();
 
@@ -9,7 +10,10 @@ const feedbackRoute = (params) => {
 
   router.get('/', withError(async (req, res) => {
     const feedbacks = await feedbackService.getList();
-    return res.json(feedbacks);
+
+    logger.info(feedbacks);
+
+    res.render('layout', { pageTitle: 'Feedback', template: 'feedback', feedbacks });
   }));
 
   router.post('/', withError((req, res) => {
