@@ -31,6 +31,7 @@ const feedbackRoute = (params) => {
         pageTitle: 'Feedback',
         template: 'feedback',
         feedbacks,
+        errors,
       });
     }),
   );
