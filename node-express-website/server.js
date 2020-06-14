@@ -63,7 +63,7 @@ app.use((req, res, next) => {
 
     return next(error);
   }
-  next()
+  next();
 });
 
 app.use(xhrErrors);
