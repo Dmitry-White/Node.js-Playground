@@ -4,9 +4,9 @@ const logErrors = (err, req, res, next) => {
   logger.error({
     status: err.status || 500,
     message: err.message,
-    stack: err.stack
+    stack: err.stack,
   });
   next(err);
-}
+};
 
 module.exports = logErrors;
