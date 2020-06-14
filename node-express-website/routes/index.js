@@ -9,19 +9,27 @@ const speakersRoute = require('./speakers');
 const router = express.Router();
 
 const indexRoute = (params) => {
-  router.get('/', withError(async (req, res) => {
-    const { speakersService } = params;
+  router.get(
+    '/',
+    withError(async (req, res) => {
+      const { speakersService } = params;
 
-    const topSpeakers = await speakersService.getList();
+      const topSpeakers = await speakersService.getList();
 
-    logger.info(topSpeakers);
+      logger.info(topSpeakers);
 
-    const artworks = await speakersService.getAllArtwork();
+      const artworks = await speakersService.getAllArtwork();
 
-    logger.info(artworks);
+      logger.info(artworks);
 
-    res.render('layout', { pageTitle: 'Welcome', template: 'index', topSpeakers, artworks });
-  }));
+      res.render('layout', {
+        pageTitle: 'Welcome',
+        template: 'index',
+        topSpeakers,
+        artworks,
+      });
+    }),
+  );
 
   router.use('/feedback', feedbackRoute(params));
 

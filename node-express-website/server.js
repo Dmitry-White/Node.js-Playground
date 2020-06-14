@@ -37,12 +37,14 @@ app.use(morgan('short', { stream: logger.stream }));
 
 app.use(express.static(path.join(__dirname, './static')));
 
-app.use(withError(async (req, res) => {
-  const speakerNames = await speakersService.getNames();
+app.use(
+  withError(async (req, res) => {
+    const speakerNames = await speakersService.getNames();
 
-  app.locals.speakerNames = speakerNames;
-  logger.info(speakerNames);
-}));
+    app.locals.speakerNames = speakerNames;
+    logger.info(speakerNames);
+  }),
+);
 
 app.use(
   '/',
@@ -56,7 +58,7 @@ app.use((req, res, next) => {
   const error = new createError.NotFound('Page not found!');
 
   return next(error);
-})
+});
 
 app.use(xhrErrors);
 app.use(logErrors);
