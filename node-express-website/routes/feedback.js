@@ -26,6 +26,7 @@ const feedbackRoute = (params) => {
   router.post(
     '/',
     withError((req, res) => {
+      logger.info(req.body);
       return res.send('Feedback form posted');
     }),
   );
