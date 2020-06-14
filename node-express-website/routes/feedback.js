@@ -21,6 +21,9 @@ const feedbackRoute = (params) => {
       const feedbacks = await feedbackService.getList();
 
       const errors = req.session.feedback ? req.session.feedback.errors : false;
+      const message = req.session.feedback
+        ? req.session.feedback.message
+        : false;
       req.session.feedback = {};
 
       logger.error(errors);
@@ -32,6 +35,7 @@ const feedbackRoute = (params) => {
         template: 'feedback',
         feedbacks,
         errors,
+        message,
       });
     }),
   );
@@ -39,7 +43,7 @@ const feedbackRoute = (params) => {
   router.post(
     '/',
     [nameValidator, emailValidator, titleValidator, messageValidator],
-    withError((req, res) => {
+    withError(async (req, res) => {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
@@ -50,7 +54,15 @@ const feedbackRoute = (params) => {
       }
 
       logger.info(req.body);
-      return res.send('Feedback form posted');
+
+      const { name, email, title, message } = req.body;
+      await feedbackService.addEntry(name, email, title, message);
+
+      req.session.feedback = {
+        message: 'Thank you for your feedback!',
+      };
+
+      return res.redirect('/feedback');
     }),
   );
 
