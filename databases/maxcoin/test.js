@@ -6,13 +6,7 @@ const { MongoClient } = require('mongodb');
 // A connection string is a string that specifies information about a data source and the means of connecting to it.
 // It is passed in code to an underlying driver or provider in order to initiate the connection.
 // Whilst commonly used for a database connection, the data source could also be a spreadsheet or text file.
-const DSN = 'mongodb://localhost:37017/maxcoin';
-
-MongoClient.connect(DSN, (err, db) => {
-    if (err) throw err;
-    console.log('Connected successfully to MongoDB server');
-    db.close();
-})
+const DSN = 'mongodb://localhost:37017';
 
 // Generic function that fetches the closing bitcoin dates of the last month from a public API
 function fetchFromAPI(callback) {
@@ -24,7 +18,38 @@ function fetchFromAPI(callback) {
     });
 }
 
-fetchFromAPI((err, data) => {
+const insertMongo = (collection, data) => {
+    const promisedInserts = [];
+
+    Object.entries(data).forEach(([key, value]) => {
+        const dataInsert = collection.insertOne({
+            date: key,
+            value,
+        });
+        promisedInserts.push(dataInsert);
+    });
+
+    return Promise.all(promisedInserts);
+}
+
+MongoClient.connect(DSN, (err, client) => {
     if (err) throw err;
-    console.log(data);
+    console.log('Connected successfully to MongoDB server');
+
+    fetchFromAPI((err, data) => {
+        if (err) throw err;
+        const db = client.db('maxcoin');
+        const collection = db.collection('value');
+
+        insertMongo(collection, data.bpi)
+            .then(result => {
+                console.log(`Successfully inserted ${result.length} document into MongoDB`);
+                client.close();
+            })
+            .catch(err => {
+                console.log(err);
+                process.exit();
+            });
+    });
+
 });
