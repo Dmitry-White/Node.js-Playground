@@ -33,6 +33,7 @@ const insertMongo = (collection, data) => {
 }
 
 MongoClient.connect(DSN, (err, client) => {
+    console.time('MongoDB');
     if (err) throw err;
     console.log('Connected successfully to MongoDB server');
 
@@ -49,6 +50,7 @@ MongoClient.connect(DSN, (err, client) => {
                 collection.findOne({}, options, (err, result) => {
                     if (err) throw err;
                     console.log(`MongoDB: The one month max value is ${result.value} and it was reached on ${result.date}`);
+                    console.timeEnd('MongoDB');
                     client.close();
                 });
 
