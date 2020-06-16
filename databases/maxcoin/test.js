@@ -44,7 +44,14 @@ MongoClient.connect(DSN, (err, client) => {
         insertMongo(collection, data.bpi)
             .then(result => {
                 console.log(`Successfully inserted ${result.length} document into MongoDB`);
-                client.close();
+
+                const options = { 'sort': [['value', 'desc']] };
+                collection.findOne({}, options, (err, result) => {
+                    if (err) throw err;
+                    console.log(`MongoDB: The one month max value is ${result.value} and it was reached on ${result.date}`);
+                    client.close();
+                });
+
             })
             .catch(err => {
                 console.log(err);
