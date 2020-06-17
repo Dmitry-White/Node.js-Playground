@@ -1,13 +1,12 @@
 const express = require('express');
 
+const itemService = require('../../../services/itemService');
+
 module.exports = (config) => {
   const router = express.Router();
   const log = config.logger;
 
-  router.get('/:itemId?', async (req, res) => {
-    return res.render('admin/item', {});
-
-    /*
+  router.get('/:itemId?', async (req, res, next) => {
     try {
       const items = await itemService.getAll();
       let item = null;
@@ -24,7 +23,6 @@ module.exports = (config) => {
     } catch (err) {
       return next(err);
     }
-    */
   });
 
   // Save or update item
