@@ -5,13 +5,15 @@ const SALT_WORK_FACTOR = 10;
 
 
 const UserSchema = mongoose.Schema({
+  // Trim and lowercase
   email: {
-    // Trim and lowercase
-    type: String, required: true, index: { unique: true }, lowercase: true, trim: true,
+    type: String,
+    required: true,
+    index: { unique: true },
+    lowercase: true,
+    trim: true,
   },
-  password: {
-    type: String, required: true, trim: true,
-  },
+  password: { type: String, required: true, trim: true },
 }, { timestamps: true });
 
 UserSchema.pre('save', function preSave(next) {
