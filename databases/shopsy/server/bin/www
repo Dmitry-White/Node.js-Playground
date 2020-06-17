@@ -2,10 +2,17 @@
 
 // Dependencies
 const http = require('http');
+const mongoose = require('mongoose');
+
 const config = require('../config');
 const App = require('../app');
 
 const log = config.logger;
+
+mongoose.connect(config.mongodb.dsn)
+  .then(() => log.info('Connected to MongoDB successufully!'))
+  .catch(err => log.error(err));
+
 
 /* Logic to start the application */
 const app = App(config);
