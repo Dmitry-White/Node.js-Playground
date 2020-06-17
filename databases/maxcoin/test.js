@@ -2,7 +2,7 @@
 const request = require('request');
 const { MongoClient } = require('mongodb');
 
-// A DSN is the name for a pointer that is used by a client application to find and connect to a database.
+// A data source name (DSN) is the name for a pointer that is used by a client application to find and connect to a database.
 // A connection string is a string that specifies information about a data source and the means of connecting to it.
 // It is passed in code to an underlying driver or provider in order to initiate the connection.
 // Whilst commonly used for a database connection, the data source could also be a spreadsheet or text file.
