@@ -1,6 +1,11 @@
 // request is a module that makes http calls easier
 const request = require('request');
 const { MongoClient } = require('mongodb');
+const redis = require('redis');
+
+const REDIS_PORT = 7379;
+
+const RedisClient = redis.createClient(REDIS_PORT);
 
 // A data source name (DSN) is the name for a pointer that is used by a client application to find and connect to a database.
 // A connection string is a string that specifies information about a data source and the means of connecting to it.
@@ -62,3 +67,36 @@ MongoClient.connect(DSN, (err, client) => {
     });
 
 });
+
+const insertRedis = (client, data, callback) => {
+    const values = ['values'];
+
+    Object.entries(data).forEach(([key, value]) => {
+        values.push(value);
+        values.push(key);
+    });
+
+    client.zadd(values, callback);
+}
+
+
+RedisClient.on('connect', () => {
+    console.time('Redis');
+    console.log('Connected successfully to Redis server');
+
+    fetchFromAPI((err, data) => {
+        if (err) throw err;
+
+        insertRedis(RedisClient, data.bpi, (err, results) => {
+            if (err) throw err;
+            console.log(`Successfully inserted ${results} key/value pairs into Redis`);
+
+            RedisClient.zrange('values', -1, -1, 'withscores', (err, result) => {
+                if (err) throw err;
+                console.log(`Redis: The one month max value is ${result[1]} and it was reached on ${result[0]}`);
+                console.timeEnd('Redis');
+                RedisClient.end();
+            });
+        })
+    });
+})
