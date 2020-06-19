@@ -18,8 +18,14 @@ async function add(itemId, userId) {
   });
 }
 
-async function getAll() {
+async function getAll(userId) {
+  return new Promise((resolve, reject) => {
+    client.hgetall(`basket: ${userId}`, (err, result) => {
+      if (err) return reject(err);
 
+      return resolve(result);
+    })
+  });
 };
 
 async function remove(itemId, userId) {
