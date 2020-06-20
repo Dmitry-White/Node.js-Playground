@@ -4,10 +4,14 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 
+const userService = require('./services/userService');
+const basketService = require('./services/basketService');
 const routeHandler = require('./routes');
 
 module.exports = (config) => {
   const app = express();
+
+  const basket = basketService(config.redis.client);
 
   // view engine setup
   app.set('views', path.join(__dirname, 'views'));
@@ -45,6 +49,26 @@ module.exports = (config) => {
       req.session.messages = [];
     }
     res.locals.messages = req.session.messages;
+
+    try {
+      const userId = req.session.userId;
+      if(userId) {
+        res.locals.currentUser = await userService.getOne(userId);
+        const basketContents = await basket.getAll(userId);
+        let count = 0;
+
+        if (basketContents) {
+          Object.entries(basketContents).forEach(([key, value]) => {
+            count += parseInt(value, 10);
+          })
+        }
+
+        res.locals.basketCount = count;
+      }
+    } catch (error) {
+      next(error);
+    }
+
     return next();
   });
 
