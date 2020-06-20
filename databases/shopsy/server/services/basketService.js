@@ -29,7 +29,13 @@ async function getAll(userId) {
 };
 
 async function remove(itemId, userId) {
+  return new Promise((resolve, reject) => {
+    client.hdel(`basket: ${userId}`, itemId, (err, result) => {
+      if (err) return reject(err);
 
+      return resolve(result);
+    })
+  });
 }
 
 const initBasket = (_client) => {
