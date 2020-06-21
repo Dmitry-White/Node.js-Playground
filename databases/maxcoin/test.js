@@ -109,6 +109,19 @@ const connection = mysql.createConnection({
     database: 'maxcoin'
 });
 
+const insertMysql = (connection, data, callback) => {
+    const values = ['values'];
+
+    const sql = 'INSERT INTO coinvalues (valuedate, coinvalue) VALUES ?';
+
+    Object.entries(data).forEach(([key, value]) => {
+        values.push(value);
+        values.push(key);
+    });
+
+    connection.query(sql, [values], callback);
+};
+
 connection.connect((err) => {
     if (err) throw err;
     console.time('MySQL');
