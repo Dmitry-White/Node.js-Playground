@@ -2,6 +2,7 @@
 const request = require('request');
 const { MongoClient } = require('mongodb');
 const redis = require('redis');
+const mysql = require('mysql2');
 
 const REDIS_PORT = 7379;
 
@@ -21,7 +22,7 @@ function fetchFromAPI(callback) {
     request.get('https://api.coindesk.com/v1/bpi/historical/close.json', (err, raw, body) => {
         return callback(err, JSON.parse(body));
     });
-}
+};
 
 const insertMongo = (collection, data) => {
     const promisedInserts = [];
@@ -35,7 +36,7 @@ const insertMongo = (collection, data) => {
     });
 
     return Promise.all(promisedInserts);
-}
+};
 
 MongoClient.connect(DSN, (err, client) => {
     console.time('MongoDB');
@@ -77,8 +78,7 @@ const insertRedis = (client, data, callback) => {
     });
 
     client.zadd(values, callback);
-}
-
+};
 
 RedisClient.on('connect', () => {
     console.time('Redis');
@@ -99,4 +99,20 @@ RedisClient.on('connect', () => {
             });
         })
     });
+});
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    port: 3406,
+    user: 'root',
+    password: 'mypassword',
+    database: 'maxcoin'
+});
+
+connection.connect((err) => {
+    if (err) throw err;
+    console.time('MySQL');
+    console.log('Connected successfully to MySQL server');
+    console.timeEnd('MySQL');
+    connection.end();
 })
