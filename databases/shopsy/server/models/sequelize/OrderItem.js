@@ -1,18 +1,10 @@
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require('sequelize');
 
-  const OrderItem = sequelize.define('OrderItem', {
+module.exports = (sequelize) => {
+  sequelize.define('OrderItem', {
     sku: DataTypes.INTEGER,
     qty: DataTypes.INTEGER,
     name: DataTypes.STRING,
     price: DataTypes.DECIMAL(10, 2)
   });
-
-  OrderItem.associate = model => OrderItem.belongsTo(model.Order, {
-    onDelete: 'CASCADE',
-    foreignKey: {
-      allowNull: false
-    }
-  });
-
-  return OrderItem;
 };

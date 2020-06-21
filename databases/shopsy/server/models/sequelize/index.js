@@ -1,31 +1,31 @@
-// from https://github.com/sequelize/express-example/blob/master/models/index.js
+function applyExtraSetup(sequelize) {
+  const { Order, OrderItem } = sequelize.models;
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-
-module.exports = (sequelize) => {
-  const db = {};
-  fs
-    .readdirSync(__dirname)
-    .filter(file =>
-      (file.indexOf('.') !== 0) && (file !== 'index.js'))
-    .forEach((file) => {
-      const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-      db[model.name] = model;
-    });
-
-  Object.keys(db).forEach((modelName) => {
-    if ('associate' in db[modelName]) {
-      db[modelName].associate(db);
+  Order.hasMany(OrderItem);
+  OrderItem.belongsTo(Order, {
+    onDelete: 'CASCADE',
+    foreignKey: {
+      allowNull: false
     }
   });
+}
+
+module.exports = (sequelize) => {
+  const modelDefiners = [
+    require('./Order'),
+    require('./OrderItem'),
+  ];
+
+  // We define all models according to their files.
+  for (const modelDefiner of modelDefiners) {
+    modelDefiner(sequelize);
+  }
+
+  // We execute any extra setup after the models are defined, such as adding associations.
+  applyExtraSetup(sequelize);
 
   // Is asynchronous but we won't wait here
   sequelize.sync();
 
-  db.sequelize = sequelize;
-  db.Sequelize = Sequelize;
-
-  return db;
+  return sequelize;
 };
