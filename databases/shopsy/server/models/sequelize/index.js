@@ -1,3 +1,5 @@
+// https://github.com/sequelize/express-example/tree/master/express-main-example
+
 function applyExtraSetup(sequelize) {
   const { Order, OrderItem } = sequelize.models;
 
