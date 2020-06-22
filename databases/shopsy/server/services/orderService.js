@@ -35,6 +35,10 @@ async function create(user, items, t) {
 
 async function getAll() {
   return models.Order.findAll({ where: {}, include: [models.OrderItem] });
+};
+
+async function setStatus(orderId, status) {
+  return models.Order.update({ status }, { where: { id: orderId } });
 }
 
 const initOrder = (_client) => {
@@ -45,7 +49,8 @@ const initOrder = (_client) => {
   return {
     inTransaction,
     create,
-    getAll
+    getAll,
+    setStatus
   }
 }
 
