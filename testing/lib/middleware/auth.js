@@ -1,8 +1,8 @@
-var basicAuth = require('basic-auth');
+const basicAuth = require('basic-auth');
 
 module.exports = (username, password) => {
   return function(req, res, next) {
-    var user = basicAuth(req);
+    const user = basicAuth(req);
 
     if (!user || user.name !== username || user.pass !== password) {
       res.set('WWW-Authenticate', 'Basic realm=Authorization Required');

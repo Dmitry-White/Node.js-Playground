@@ -1,11 +1,11 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   res.render('index', { title: 'Nadia\'s Garden' });
 });
 
-router.delete('/', function(req, res, next) {
+router.delete('/', function(req, res) {
   res.end(500);
 });
 
