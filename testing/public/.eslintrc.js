@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-undef
-module.exports = {
+({
   parserOptions: {
     sourceType: "script",
   },
@@ -12,4 +12,4 @@ module.exports = {
     "no-var": "off",
     "prefer-const": "off",
   },
-};
+});
