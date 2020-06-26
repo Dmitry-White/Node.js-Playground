@@ -1,5 +1,5 @@
-const moment = require('moment');
-const Joi = require('joi');
+const moment = require("moment");
+const Joi = require("joi");
 
 module.exports = class Reservation {
   /**
@@ -34,7 +34,7 @@ module.exports = class Reservation {
    * @return {string} ISO 8601 standard date and time.
    */
   static combineDateTime(date, time) {
-    return moment.utc(`${date} ${time}`, 'YYYY/MM/DD hh:mm A').toISOString();
+    return moment.utc(`${date} ${time}`, "YYYY/MM/DD hh:mm A").toISOString();
   }
 
   /**
@@ -48,14 +48,19 @@ module.exports = class Reservation {
       datetime: Joi.date().iso().required().raw(),
       party: Joi.number().min(1).max(7).required(),
       name: Joi.string().max(255).required(),
-      email: Joi.string().max(255).required(),
-      phone: Joi.string().max(50).allow(''),
-      message: Joi.string().max(1000).allow(''),
+      email: Joi.string().email().required(),
+      phone: Joi.string().max(50).allow(""),
+      message: Joi.string().max(1000).allow(""),
     });
 
-    Joi.validate(this, schema, {
-      abortEarly: false,
-      stripUnknown: true
-    }, callback);
+    Joi.validate(
+      this,
+      schema,
+      {
+        abortEarly: false,
+        stripUnknown: true,
+      },
+      callback
+    );
   }
-}
+};

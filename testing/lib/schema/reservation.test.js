@@ -20,3 +20,47 @@ describe("combineDateTime", () => {
     expect(actual).toBeNull();
   });
 });
+
+describe("validator", () => {
+  it("should validate with no optional fields", (done) => {
+    const reservation = new Reservation({
+      date: "2017/06/10",
+      time: "06:02 AM",
+      party: 4,
+      name: "Family",
+      email: "username@example.com",
+    });
+
+    const callback = (err, value) => {
+      try {
+        expect(value).toEqual(reservation);
+        return done(err);
+      } catch (error) {
+        return done(error);
+      }
+    };
+
+    reservation.validator(callback);
+  });
+
+  it("should invalidate with an invalid email", (done) => {
+    const reservation = new Reservation({
+      date: "2017/06/10",
+      time: "06:02 AM",
+      party: 4,
+      name: "Family",
+      email: "username",
+    });
+
+    const callback = (err) => {
+      try {
+        expect(err).toBeInstanceOf(Error);
+        return done();
+      } catch (error) {
+        return done(error);
+      }
+    };
+
+    reservation.validator(callback);
+  });
+});
