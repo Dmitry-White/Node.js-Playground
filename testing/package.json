@@ -10,7 +10,8 @@
   "scripts": {
     "debug": "cross-env DEBUG=nadia:* nodemon",
     "eslint": "eslint .",
-    "start": "node bin/www"
+    "start": "node bin/www",
+    "jest": "jest"
   },
   "dependencies": {
     "basic-auth": "^1.1.0",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "cross-env": "^5.0.1",
     "eslint": "^8.3.0",
+    "jest": "^27.4.3",
     "nodemon": "^1.11.0"
   }
 }
