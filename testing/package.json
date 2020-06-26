@@ -9,9 +9,9 @@
   "private": true,
   "scripts": {
     "debug": "cross-env DEBUG=nadia:* nodemon",
-    "eslint": "eslint .",
     "start": "node bin/www",
-    "jest": "jest"
+    "lint": "eslint .",
+    "test": "jest"
   },
   "dependencies": {
     "basic-auth": "^1.1.0",
