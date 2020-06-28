@@ -3,6 +3,7 @@ module.exports = {
     node: true,
     es2020: true,
     jest: true,
+    mocha: true,
   },
   extends: "eslint:recommended",
   rules: {
