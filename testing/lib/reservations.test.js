@@ -62,3 +62,25 @@ describe("validate", () => {
     }
   });
 });
+
+describe("create", () => {
+  it("should reject if validation fails, mock function", async () => {
+    // Store the original
+    const original = reservations.validate;
+
+    const error = new Error("Fail");
+
+    // Mock the function
+    reservations.validate = jest.fn(() => Promise.reject(error));
+
+    try {
+      await reservations.create();
+    } catch (err) {
+      expect(err).toEqual(error);
+    }
+
+    expect(reservations.validate).toBeCalledTimes(1);
+
+    reservations.validate = original;
+  });
+});
