@@ -1,6 +1,24 @@
 const reservations = require("./reservations");
 const Reservation = require("./schema/reservation");
 
+describe("getAll", () => {
+  let reservations;
+
+  beforeAll(() => {
+    jest.mock("./reservations");
+    reservations = require("./reservations");
+  });
+
+  afterAll(() => {
+    // jest.unmock("./reservations");
+  });
+
+  it("should be mocked and not create a DB record", async () => {
+    const data = await reservations.getAll();
+    expect(data).toBeUndefined();
+  });
+});
+
 describe("validate", () => {
   it("should resolve with no optional fields, Promises", () => {
     const reservation = new Reservation({
