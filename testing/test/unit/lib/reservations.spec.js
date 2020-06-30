@@ -1,12 +1,25 @@
 const chai = require("chai");
+const proxyquire = require("proxyquire");
+const sinon = require("sinon");
 
 const Reservation = require("../../../lib/schema/reservation");
-const reservations = require("../../../lib/reservations");
 
 // eslint-disable-next-line
 const should = chai.should();
 
 describe("Reservations Lib", function () {
+  let reservations;
+
+  const debugStub = function () {
+    return sinon.stub();
+  };
+
+  before(function () {
+    reservations = proxyquire("../../../lib/reservations", {
+      debug: debugStub,
+    });
+  });
+
   context("Validate", function () {
     it("should resolve with no optional fields, Promises", () => {
       const reservation = new Reservation({
