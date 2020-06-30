@@ -1,6 +1,7 @@
 const chai = require("chai");
 const proxyquire = require("proxyquire");
 const sinon = require("sinon");
+const db = require("sqlite");
 
 const Reservation = require("../../../lib/schema/reservation");
 
@@ -77,6 +78,39 @@ describe("Reservations Lib", function () {
       } catch (error) {
         error.should.be.an("error").and.not.be.null;
       }
+    });
+  });
+
+  context("Create", function () {
+    const dbStub = sinon.stub(db, "run").resolves({
+      stmt: {
+        lastID: 1349,
+      },
+    });
+
+    before(function () {
+      reservations = proxyquire("../../../lib/reservations", {
+        debug: debugStub,
+        sqlite: dbStub,
+      });
+    });
+
+    after(function () {
+      dbStub.restore();
+    });
+
+    it("should return the created reservation ID", async () => {
+      const reservation = new Reservation({
+        date: "2017/06/10",
+        time: "06:02 AM",
+        party: 4,
+        name: "Family",
+        email: "username@example.com",
+      });
+
+      const value = await reservations.create(reservation);
+
+      value.should.deep.equal(1349);
     });
   });
 });
