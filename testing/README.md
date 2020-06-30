@@ -31,8 +31,8 @@ Visit https://eslint.org for details.
 
 ## Testing
 
-This project uses Jest for testing.
-Visit https://jestjs.io for details.
+This project uses Jest, Mocha and Chai for testing.
+Visit https://jestjs.io, https://mochajs.org and https://chaijs.com for details.
 
 To execute tests: `npm run test`
 
