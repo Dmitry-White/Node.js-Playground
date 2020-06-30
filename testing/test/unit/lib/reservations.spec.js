@@ -8,20 +8,20 @@ const Reservation = require("../../../lib/schema/reservation");
 // eslint-disable-next-line
 const should = chai.should();
 
-describe("Reservations Lib", function () {
+describe("Reservations Lib", () => {
   let reservations;
 
-  const debugStub = function () {
+  const debugStub = () => {
     return sinon.stub();
   };
 
-  before(function () {
+  before(() => {
     reservations = proxyquire("../../../lib/reservations", {
       debug: debugStub,
     });
   });
 
-  context("Validate", function () {
+  context("Validate", () => {
     it("should resolve with no optional fields, Promises", () => {
       const reservation = new Reservation({
         date: "2017/06/10",
@@ -81,21 +81,21 @@ describe("Reservations Lib", function () {
     });
   });
 
-  context("Create", function () {
+  context("Create", () => {
     const dbStub = sinon.stub(db, "run").resolves({
       stmt: {
         lastID: 1349,
       },
     });
 
-    before(function () {
+    before(() => {
       reservations = proxyquire("../../../lib/reservations", {
         debug: debugStub,
         sqlite: dbStub,
       });
     });
 
-    after(function () {
+    after(() => {
       dbStub.restore();
     });
 

@@ -4,8 +4,8 @@ const Reservation = require("../../../../lib/schema/reservation");
 
 const should = chai.should();
 
-describe("Reservation Schema", function () {
-  context("Date and Time Combination", function () {
+describe("Reservation Schema", () => {
+  context("Date and Time Combination", () => {
     it("should return an ISO 8601 date and time with valid input", () => {
       const date = "2017/06/10";
       const time = "06:02 AM";
@@ -26,7 +26,7 @@ describe("Reservation Schema", function () {
     });
   });
 
-  context("Validator", function () {
+  context("Validator", () => {
     it("should validate with no optional fields", (done) => {
       const reservation = new Reservation({
         date: "2017/06/10",
