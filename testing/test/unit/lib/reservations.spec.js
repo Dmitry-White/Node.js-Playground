@@ -35,5 +35,35 @@ describe("Reservations Lib", function () {
         .validate(reservation)
         .catch((error) => error.should.be.an("error").and.not.be.null);
     });
+
+    it("should resolve with no optional fields, Async/Await", async () => {
+      const reservation = new Reservation({
+        date: "2017/06/10",
+        time: "06:02 AM",
+        party: 4,
+        name: "Family",
+        email: "username@example.com",
+      });
+
+      const value = await reservations.validate(reservation);
+
+      value.should.deep.equal(reservation);
+    });
+
+    it("should reject with an invalid email, Async/Await", async () => {
+      const reservation = new Reservation({
+        date: "2017/06/10",
+        time: "06:02 AM",
+        party: 4,
+        name: "Family",
+        email: "username",
+      });
+
+      try {
+        await reservations.validate(reservation);
+      } catch (error) {
+        error.should.be.an("error").and.not.be.null;
+      }
+    });
   });
 });
