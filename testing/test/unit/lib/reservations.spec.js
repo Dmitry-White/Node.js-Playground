@@ -142,4 +142,36 @@ describe("Reservations Lib", () => {
       validateSpy.restore();
     });
   });
+
+  context("Save", () => {
+    const dbMock = sinon.mock(db);
+
+    before(() => {
+      dbMock.expects("run").once();
+
+      reservations = proxyquire("../../../lib/reservations", {
+        debug: debugStub,
+        sqlite: dbMock,
+      });
+    });
+
+    after(() => {
+      dbMock.restore();
+    });
+
+    it("should only call the database once", () => {
+      const transformedReservation = {
+        party: 4,
+        name: "Family",
+        email: "username@example.com",
+        phone: undefined,
+        message: undefined,
+        datetime: "2017-06-10T06:02:00.000Z",
+      };
+
+      reservations.save(transformedReservation);
+
+      dbMock.verify();
+    });
+  });
 });
