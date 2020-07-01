@@ -2,11 +2,13 @@ const chai = require("chai");
 const proxyquire = require("proxyquire");
 const sinon = require("sinon");
 const db = require("sqlite");
+const sinonChai = require("sinon-chai");
 
 const Reservation = require("../../../lib/schema/reservation");
 
 // eslint-disable-next-line
 const should = chai.should();
+chai.use(sinonChai);
 
 describe("Reservations Lib", () => {
   let reservations;
@@ -111,6 +113,33 @@ describe("Reservations Lib", () => {
       const value = await reservations.create(reservation);
 
       value.should.deep.equal(1349);
+    });
+
+    it("should call the validator with a transformed reservation once", async () => {
+      const reservation = new Reservation({
+        date: "2017/06/10",
+        time: "06:02 AM",
+        party: 4,
+        name: "Family",
+        email: "username@example.com",
+      });
+
+      const validateSpy = sinon.spy(reservations, "validate");
+
+      await reservations.create(reservation);
+
+      validateSpy.should.have.been.calledOnce.and.been.calledWith(
+        sinon.match({
+          party: 4,
+          name: "Family",
+          email: "username@example.com",
+          phone: undefined,
+          message: undefined,
+          datetime: "2017-06-10T06:02:00.000Z",
+        })
+      );
+
+      validateSpy.restore();
     });
   });
 });
