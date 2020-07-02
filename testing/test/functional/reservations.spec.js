@@ -49,4 +49,44 @@ describe("/reservations", () => {
       );
     });
   });
+
+  context("POST", () => {
+    it("should accept a valid reservation request", async () => {
+      const res = await chai
+        .request(app)
+        .post("/reservations")
+        .set("Content-Type", "application/x-www-form-urlencoded")
+        .send({
+          date: "2017/06/10",
+          time: "06:02 AM",
+          party: 4,
+          name: "Family",
+          email: "username@example.com",
+        });
+
+      res.should.have.status(200);
+      res.text.should.contain(
+        "Thanks, your booking request #1349 is waiting to be confirmed"
+      );
+    });
+
+    it("should reject an invalid reservation request", async () => {
+      const res = await chai
+        .request(app)
+        .post("/reservations")
+        .set("Content-Type", "application/x-www-form-urlencoded")
+        .send({
+          date: "2017/06/10",
+          time: "06:02 AM",
+          party: "bananas",
+          name: "Family",
+          email: "username@example.com",
+        });
+
+      res.should.have.status(400);
+      res.text.should.contain(
+        "Sorry, there was a problem with your booking request"
+      );
+    });
+  });
 });

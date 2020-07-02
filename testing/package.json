@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "test:mocha": "cross-env DEBUG=nadia:* mocha",
     "test:jest": "jest",
-    "coverage": "cross-env DEBUG=nadia:* nyc --reporter=html --reporter=text mocha"
+    "coverage:mocha": "cross-env DEBUG=nadia:* nyc --reporter=html --reporter=text mocha",
+    "coverage:jest": "cross-env DEBUG=nadia:* nyc --reporter=html --reporter=text jest"
   },
   "dependencies": {
     "basic-auth": "^1.1.0",
