@@ -1,21 +1,24 @@
-const mockDebug = jest.fn();
-const mockRun = jest.fn().mockResolvedValue([1]);
-
-jest.mock("debug", () => () => mockDebug);
-jest.mock("sqlite", () => {
-  return {
-    run: mockRun,
-  };
-});
-
-const reservations = require("./reservations");
 const Reservation = require("./schema/reservation");
 
 describe("save", () => {
   let reservations;
 
+  const db = require("sqlite");
+  const dbSpy = jest.spyOn(db, "run");
+
+  const mockDebug = jest.fn();
+  const mockRun = jest.fn().mockResolvedValue([1]);
+
   beforeAll(() => {
+    jest.mock("debug", () => () => mockDebug);
+    dbSpy.mockImplementation(mockRun);
+
     reservations = require("./reservations");
+  });
+
+  afterAll(() => {
+    jest.unmock("debug");
+    dbSpy.mockRestore();
   });
 
   it("should be mocked and not create a DB record", async () => {
@@ -55,6 +58,12 @@ describe("getAll", () => {
 });
 
 describe("validate", () => {
+  let reservations;
+
+  beforeAll(() => {
+    reservations = jest.requireActual("./reservations");
+  });
+
   it("should resolve with no optional fields, Promises", () => {
     const reservation = new Reservation({
       date: "2017/06/10",
@@ -114,9 +123,32 @@ describe("validate", () => {
       expect(error).toBeInstanceOf(Error);
     }
   });
+
+  it("should be called and reject empty input", async () => {
+    const reservation = null;
+
+    const validateSpy = jest.spyOn(reservations, "validate");
+
+    try {
+      await reservations.validate(reservation);
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Cannot read property 'validator' of null");
+    }
+
+    expect(validateSpy).toBeCalledWith(reservation);
+
+    validateSpy.mockRestore();
+  });
 });
 
 describe("create", () => {
+  let reservations;
+
+  beforeAll(() => {
+    reservations = jest.requireActual("./reservations");
+  });
+
   it("should reject if validation fails, mock function", async () => {
     // Store the original
     const original = reservations.validate;
@@ -135,5 +167,27 @@ describe("create", () => {
     expect(reservations.validate).toBeCalledTimes(1);
 
     reservations.validate = original;
+  });
+
+  it("should reject if validation fails using spyOn", async () => {
+    const reservation = null;
+
+    const validateSpy = jest.spyOn(reservations, "validate");
+
+    const error = new Error("Fail");
+
+    validateSpy.mockImplementation(() => Promise.reject(error));
+
+    try {
+      await reservations.create(reservation);
+    } catch (err) {
+      expect(err).toBeInstanceOf(Error);
+      expect(err).toEqual(error);
+    }
+
+    expect(validateSpy).toBeCalledWith(reservation);
+    expect(validateSpy).toBeCalledTimes(1);
+
+    validateSpy.mockRestore();
   });
 });
