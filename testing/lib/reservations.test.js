@@ -1,5 +1,40 @@
+const mockDebug = jest.fn();
+const mockRun = jest.fn().mockResolvedValue([1]);
+
+jest.mock("debug", () => () => mockDebug);
+jest.mock("sqlite", () => {
+  return {
+    run: mockRun,
+  };
+});
+
 const reservations = require("./reservations");
 const Reservation = require("./schema/reservation");
+
+describe("save", () => {
+  let reservations;
+
+  beforeAll(() => {
+    reservations = require("./reservations");
+  });
+
+  it("should be mocked and not create a DB record", async () => {
+    const reservation = new Reservation({
+      date: "2017/06/10",
+      time: "06:02 AM",
+      party: 4,
+      name: "Family",
+      email: "username",
+    });
+    const expected = [1];
+
+    const data = await reservations.save(reservation);
+
+    expect(mockDebug).toBeCalledTimes(1);
+    expect(mockRun).toBeCalledTimes(1);
+    expect(data).toStrictEqual(expected);
+  });
+});
 
 describe("getAll", () => {
   let reservations;
@@ -10,7 +45,7 @@ describe("getAll", () => {
   });
 
   afterAll(() => {
-    // jest.unmock("./reservations");
+    jest.unmock("./reservations");
   });
 
   it("should be mocked and not create a DB record", async () => {
