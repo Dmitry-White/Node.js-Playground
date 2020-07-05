@@ -65,4 +65,4 @@ class MySQLService {
   }
 }
 
-export default MySQLService;
+module.exports = MySQLService;

@@ -54,4 +54,4 @@ class RedisService {
   }
 }
 
-export default RedisService;
+module.exports = RedisService;
