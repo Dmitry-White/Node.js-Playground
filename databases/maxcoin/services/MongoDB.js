@@ -31,84 +31,81 @@ class MongoService {
     this.collection = db.collection('values');
 
     return this.client;
-
-    MongoClient.connect(DSN, (err, client) => {
-      if (err) throw err;
-
-      fetchFromAPI((err, data) => {
-        if (err) throw err;
-
-        insertMongo(collection, data.bpi)
-          .then((result) => {
-            console.log(
-              `Successfully inserted ${result.length} document into MongoDB`,
-            );
-
-            const options = { sort: [['value', 'desc']] };
-            collection.findOne({}, options, (err, result) => {
-              if (err) throw err;
-              console.log(
-                `MongoDB: The one month max value is ${result.value} and it was reached on ${result.date}`,
-              );
-              client.close();
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            process.exit();
-          });
-      });
-    });
   }
 
-  async disconnect() {
+  disconnect() {
     if (!this.client) {
       return false;
     }
 
-    this.client.close();
+    return this.client.close();
   }
 
   async insert() {
-    const insertMongo = (collection, data) => {
-      const promisedInserts = [];
+    const data = await this.coinAPI.fetch();
+    const documents = [];
 
-      Object.entries(data).forEach(([key, value]) => {
-        const dataInsert = collection.insertOne({
-          date: key,
-          value,
-        });
-        promisedInserts.push(dataInsert);
-      });
+    Object.entries(data.bpi).forEach(([key, value]) => {
+      const dataInsert = {
+        date: key,
+        value,
+      };
+      documents.push(dataInsert);
+    });
 
-      return Promise.all(promisedInserts);
-    };
+    return this.collection.insertMany(documents);
+  }
+
+  getMax() {
+    const options = { sort: [['value', 'desc']] };
+    return this.collection.findOne({}, options);
   }
 
   async max() {
-    console.time('MongoDB');
-    console.info('Connecting to MongoDB...');
-
     try {
-      const client = await this.connect();
+      console.time('MongoDB Connect');
+      console.info('Connecting to MongoDB...');
+
+      await this.connect();
+
       console.info('Connected successfully to MongoDB server');
-    } catch (error) {
-      throw new Error('Connection to MongoDB failed.', error);
-    }
+      console.timeEnd('MongoDB Connect');
 
-    console.timeEnd('MongoDB');
+      console.time('MongoDB Insert');
+      console.info('Inserting into MongoDB...');
 
-    console.time('MongoDB');
-    console.info('Disconnecting from MongoDB...');
+      const insertResult = await this.insert();
 
-    try {
-      const client = await this.disconnect();
+      console.info(
+        `Successfully inserted ${insertResult.insertedCount} documents into MongoDB`,
+      );
+      console.timeEnd('MongoDB Insert');
+
+      console.time('MongoDB Find');
+      console.info('Querying MongoDB...');
+
+      const queryResult = await this.getMax();
+
+      console.log(
+        `MongoDB: The five year max value is ${queryResult.value} and it was reached on ${queryResult.date}`,
+      );
+      console.timeEnd('MongoDB Find');
+
+      console.time('MongoDB Disconnect');
+      console.info('Disconnecting from MongoDB...');
+
+      await this.disconnect();
+
       console.info('Disconnected successfully from MongoDB server');
-    } catch (error) {
-      throw new Error('Disconnection from MongoDB failed.', error);
-    }
+      console.timeEnd('MongoDB Disconnect');
 
-    console.timeEnd('MongoDB');
+      return {
+        date: queryResult.date,
+        value: queryResult.value,
+      };
+    } catch (error) {
+      throw new Error('Something went wrong.', error);
+    }
   }
 }
 
