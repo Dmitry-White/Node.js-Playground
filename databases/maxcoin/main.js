@@ -1,8 +1,8 @@
-const CoinAPI = require('./api/Coin');
+const MongoService = require('./services/MongoDB');
 
 async function run() {
-  const coinAPI = new CoinAPI();
-  return coinAPI.fetch();
+  const mongoService = new MongoService();
+  return mongoService.max();
 }
 
 run()

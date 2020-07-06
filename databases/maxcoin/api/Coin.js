@@ -7,9 +7,9 @@ class CoinAPI {
 
   formatDate(date) {
     const dateObj = new Date(date);
-    const month = '' + (dateObj.getMonth() + 1);
-    const day = '' + dateObj.getDate();
     const year = dateObj.getFullYear();
+    let month = '' + (dateObj.getMonth() + 1);
+    let day = '' + dateObj.getDate();
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
