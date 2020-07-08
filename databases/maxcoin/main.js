@@ -1,5 +1,6 @@
 const MongoService = require('./services/MongoDB');
 const RedisService = require('./services/Redis');
+const MySQLService = require('./services/MySQL');
 
 async function runMongo() {
   const mongoService = new MongoService();
@@ -11,7 +12,12 @@ async function runRedis() {
   return redisService.max();
 }
 
-const run = runRedis;
+async function runMySQL() {
+  const mySQLService = new MySQLService();
+  return mySQLService.max();
+}
+
+const run = runMySQL;
 
 run()
   .then((result) => console.log(result))
