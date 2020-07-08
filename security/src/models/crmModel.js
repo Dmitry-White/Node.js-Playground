@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-export const ContactSchema = new Schema({
+const ContactSchema = new Schema({
   firstName: {
     type: String,
     required: 'Enter a first name',
@@ -25,3 +25,5 @@ export const ContactSchema = new Schema({
     default: Date.now,
   },
 });
+
+export default ContactSchema;
