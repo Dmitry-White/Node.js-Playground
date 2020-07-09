@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import UserSchema from '../models/userModel';
 
-const JWT_SECRET = 'SECRET';    
+const JWT_SECRET = 'SECRET';
 
 const User = mongoose.model('User', UserSchema);
 
@@ -71,3 +71,5 @@ const login = (req, res) => {
     throw error;
   }
 };
+
+export { loginRequired, register, login };
