@@ -10,13 +10,13 @@ const User = mongoose.model('User', UserSchema);
 
 const loginRequired = (req, res, next) => {
   if (!req.user) {
-    res.status(401).json({ message: 'Unauthorised user!' });
+    return res.status(401).json({ message: 'Unauthorised user!' });
   }
 
-  next();
+  return next();
 };
 
-const register = (req, res) => {
+const register = async (req, res) => {
   const hashPassword = bcrypt.hashSync(req.body.password, 10);
 
   const userData = {
@@ -29,8 +29,7 @@ const register = (req, res) => {
   try {
     const user = await newUser.save();
 
-    delete user.hashPassword;
-
+    user.hashPassword = null;
     return res.json(user);
   } catch (error) {
     return res.status(400).send({
@@ -39,7 +38,7 @@ const register = (req, res) => {
   }
 };
 
-const login = (req, res) => {
+const login = async (req, res) => {
   const userData = {
     email: req.body.email,
   };
@@ -72,4 +71,4 @@ const login = (req, res) => {
   }
 };
 
-export { loginRequired, register, login };
+export { JWT_SECRET, loginRequired, register, login };
