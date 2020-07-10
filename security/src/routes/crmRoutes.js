@@ -5,7 +5,9 @@ import {
   updateContact,
   deleteContact,
 } from '../controllers/crmController';
-import { login, loginRequired, register } from '../controllers/userController';
+import { login, register } from '../controllers/userController';
+import handleErrors from '../core/decorators';
+import loginRequired from '../core/middlewares';
 
 const routes = (app) => {
   app
@@ -18,25 +20,25 @@ const routes = (app) => {
         next();
       },
       loginRequired,
-      getContacts,
+      handleErrors(getContacts),
     )
 
     // POST endpoint
-    .post(loginRequired, addNewContact);
+    .post(loginRequired, handleErrors(addNewContact));
 
   app
     .route('/contact/:contactId')
     // get specific contact
-    .get(loginRequired, getContactWithID)
+    .get(loginRequired, handleErrors(getContactWithID))
 
     // put request
-    .put(loginRequired, updateContact)
+    .put(loginRequired, handleErrors(updateContact))
 
     // delete request
-    .delete(loginRequired, deleteContact);
+    .delete(loginRequired, handleErrors(deleteContact));
 
   // registration route
-  app.route('/auth/register').post(register);
+  app.route('/auth/register').post(handleErrors(register));
 
   // login route
   app.route('/login').post(login);

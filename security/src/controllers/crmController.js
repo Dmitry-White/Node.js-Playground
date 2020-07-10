@@ -4,57 +4,41 @@ import ContactSchema from '../models/crmModel';
 
 const Contact = mongoose.model('Contact', ContactSchema);
 
-const addNewContact = (req, res) => {
+const addNewContact = async (req, res) => {
   const newContact = new Contact(req.body);
 
-  newContact.save((err, contact) => {
-    if (err) {
-      res.send(err);
-    }
-    res.json(contact);
-  });
+  const contact = await newContact.save();
+
+  return res.json(contact);
 };
 
-const getContacts = (req, res) => {
-  Contact.find({}, (err, contact) => {
-    if (err) {
-      res.send(err);
-    }
-    res.json(contact);
-  });
+const getContacts = async (req, res) => {
+  const contact = await Contact.find({});
+
+  return res.json(contact);
 };
 
-const getContactWithID = (req, res) => {
-  Contact.findById(req.params.contactId, (err, contact) => {
-    if (err) {
-      res.send(err);
-    }
-    res.json(contact);
-  });
+const getContactWithID = async (req, res) => {
+  const contact = await Contact.findById(req.params.contactId);
+
+  return res.json(contact);
 };
 
-const updateContact = (req, res) => {
-  Contact.findOneAndUpdate(
+const updateContact = async (req, res) => {
+  const contact = await Contact.findOneAndUpdate(
     { _id: req.params.contactId },
     req.body,
     { new: true },
-    (err, contact) => {
-      if (err) {
-        res.send(err);
-      }
-      res.json(contact);
-    },
   );
+
+  return res.json(contact);
 };
 
-const deleteContact = (req, res) => {
-  Contact.remove({ _id: req.params.contactId }, (err, contact) => {
-    if (err) {
-      res.send(err);
-    }
-    console.log(contact);
-    res.json({ message: 'Successfully deleted contact' });
-  });
+const deleteContact = async (req, res) => {
+  const contact = await Contact.remove({ _id: req.params.contactId });
+
+  console.log(contact);
+  return res.json({ message: 'Successfully deleted contact' });
 };
 
 export {

@@ -4,38 +4,23 @@ import jwt from 'jsonwebtoken';
 
 import UserSchema from '../models/userModel';
 
-const JWT_SECRET = 'SECRET';
+import JWT_SECRET from '../core/constants';
 
 const User = mongoose.model('User', UserSchema);
 
-const loginRequired = (req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({ message: 'Unauthorised user!' });
-  }
-
-  return next();
-};
-
 const register = async (req, res) => {
   const hashPassword = bcrypt.hashSync(req.body.password, 10);
-
   const userData = {
     username: req.body.username,
     email: req.body.email,
     hashPassword,
   };
   const newUser = new User(userData);
+  const user = await newUser.save();
 
-  try {
-    const user = await newUser.save();
+  user.hashPassword = null;
 
-    user.hashPassword = null;
-    return res.json(user);
-  } catch (error) {
-    return res.status(400).send({
-      message: error,
-    });
-  }
+  return res.json(user);
 };
 
 const login = async (req, res) => {
@@ -47,13 +32,13 @@ const login = async (req, res) => {
     const user = await User.findOne(userData);
 
     if (!user) {
-      res
+      return res
         .status(401)
         .json({ message: 'Authentication failed - no user found!' });
     }
 
     if (!user.comparePassword(req.body.password, user.hashPassword)) {
-      res
+      return res
         .status(401)
         .json({ message: 'Authentication failed - wrong password!' });
     }
@@ -67,8 +52,9 @@ const login = async (req, res) => {
 
     return res.json({ token });
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
 
-export { JWT_SECRET, loginRequired, register, login };
+export { register, login };

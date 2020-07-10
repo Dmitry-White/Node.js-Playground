@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 
-import { JWT_SECRET } from './src/controllers/userController';
+import JWT_SECRET from './src/core/constants';
 import routes from './src/routes/crmRoutes';
 
 const app = express();
