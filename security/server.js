@@ -52,7 +52,9 @@ routes(app);
 app.use(express.static('public'));
 
 app.get('/', (req, res) =>
-  res.send(`Node and express server is running on port ${PORT}`),
+  res.send('[app] Node and express server is running on port: ', PORT),
 );
 
-app.listen(PORT, () => console.log(`your server is running on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log('[app] Your server is running on port: ', PORT),
+);

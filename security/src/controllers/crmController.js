@@ -21,6 +21,10 @@ const getContacts = async (req, res) => {
 const getContactWithID = async (req, res) => {
   const contact = await Contact.findById(req.params.contactId);
 
+  if (!contact) {
+    throw new Error('No contact found!');
+  }
+
   return res.json(contact);
 };
 
@@ -31,13 +35,20 @@ const updateContact = async (req, res) => {
     { new: true },
   );
 
+  if (!contact) {
+    throw new Error('No contact found!');
+  }
+
   return res.json(contact);
 };
 
 const deleteContact = async (req, res) => {
-  const contact = await Contact.remove({ _id: req.params.contactId });
+  const contact = await Contact.deleteOne({ _id: req.params.contactId });
 
-  console.log(contact);
+  if (!contact.deletedCount) {
+    throw new Error('No contact found!');
+  }
+
   return res.json({ message: 'Successfully deleted contact' });
 };
 

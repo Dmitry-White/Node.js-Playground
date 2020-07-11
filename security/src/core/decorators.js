@@ -1,11 +1,13 @@
-const handleErrors = (handler) => async (req, res) => {
+const handleErrors = (handler) => async (req, res, next) => {
   try {
-    return await handler(req, res);
+    await handler(req, res, next);
+    return next();
   } catch (error) {
     const err = {
       message: error.message,
     };
-    return res.status(500).send(err);
+    res.status(500).send(err);
+    return next(err);
   }
 };
 

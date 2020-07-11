@@ -52,8 +52,7 @@ const login = async (req, res) => {
 
     return res.json({ token });
   } catch (error) {
-    console.error(error);
-    throw error;
+    throw new Error('Authentication failed - something went wrong!', error);
   }
 };
 
