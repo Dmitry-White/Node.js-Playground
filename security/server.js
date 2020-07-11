@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 import routes from './src/routes/crmRoutes';
 import { logRequests, setupJWT } from './src/core/middlewares';
@@ -11,6 +12,14 @@ const PORT = 3000;
 
 // Helmet setup
 app.use(helmet());
+
+// Rate Limit setup
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests. Please try again later (in 15 minutes).',
+});
+app.use(limiter);
 
 // mongoose connection
 mongoose.Promise = global.Promise;
