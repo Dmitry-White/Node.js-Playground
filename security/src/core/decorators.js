@@ -1,6 +1,6 @@
-const handleErrors = (handler) => async (req, res, next) => {
+const withErrors = (handler) => async (req, res, next) => {
   try {
-    await handler(req, res, next);
+    await handler(req, res);
     return next();
   } catch (error) {
     const err = {
@@ -11,4 +11,4 @@ const handleErrors = (handler) => async (req, res, next) => {
   }
 };
 
-export default handleErrors;
+export default withErrors;

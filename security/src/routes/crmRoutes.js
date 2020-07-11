@@ -6,42 +6,33 @@ import {
   deleteContact,
 } from '../controllers/crmController';
 import { login, register } from '../controllers/userController';
-import handleErrors from '../core/decorators';
-import loginRequired from '../core/middlewares';
+import withErrors from '../core/decorators';
+import { loginRequired, validate } from '../core/middlewares';
 
 const routes = (app) => {
   app
     .route('/contacts')
-    .get(
-      (req, res, next) => {
-        // middleware
-        console.log(`Request from: ${req.originalUrl}`);
-        console.log(`Request type: ${req.method}`);
-        next();
-      },
-      loginRequired,
-      handleErrors(getContacts),
-    )
+    .get(loginRequired, withErrors(getContacts))
 
     // POST endpoint
-    .post(loginRequired, handleErrors(addNewContact));
+    .post(loginRequired, validate('contact'), withErrors(addNewContact));
 
   app
     .route('/contact/:contactId')
     // get specific contact
-    .get(loginRequired, handleErrors(getContactWithID))
+    .get(loginRequired, withErrors(getContactWithID))
 
     // put request
-    .put(loginRequired, handleErrors(updateContact))
+    .put(loginRequired, withErrors(updateContact))
 
     // delete request
-    .delete(loginRequired, handleErrors(deleteContact));
+    .delete(loginRequired, withErrors(deleteContact));
 
   // registration route
-  app.route('/auth/register').post(handleErrors(register));
+  app.route('/auth/register').post(validate('auth'), withErrors(register));
 
   // login route
-  app.route('/login').post(login);
+  app.route('/login').post(validate('auth'), login);
 };
 
 export default routes;

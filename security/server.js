@@ -1,10 +1,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-import jwt from 'jsonwebtoken';
 
-import JWT_SECRET from './src/core/constants';
 import routes from './src/routes/crmRoutes';
+import { logRequests, setupJWT } from './src/core/middlewares';
 
 const app = express();
 const PORT = 3000;
@@ -20,31 +19,11 @@ mongoose.connect('mongodb://localhost/CRMdb', {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Request Logger setup
+app.use(logRequests);
+
 // JWT setup
-app.use((req, res, next) => {
-  const isAuthReady =
-    req.headers &&
-    req.headers.authorization &&
-    req.headers.authorization.split(' ')[0] === 'JWT';
-
-  if (!isAuthReady) {
-    req.user = null;
-    return next();
-  }
-
-  try {
-    const decoded = jwt.verify(
-      req.headers.authorization.split(' ')[1],
-      JWT_SECRET,
-    );
-
-    req.user = decoded;
-  } catch (error) {
-    req.user = null;
-  }
-
-  return next();
-});
+app.use(setupJWT);
 
 routes(app);
 
