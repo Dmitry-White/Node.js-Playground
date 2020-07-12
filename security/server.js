@@ -1,12 +1,16 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import helmet from 'helmet';
 
 import routes from './src/routes/crmRoutes';
 import { logRequests, setupJWT } from './src/core/middlewares';
 
 const app = express();
 const PORT = 3000;
+
+// Helmet setup
+app.use(helmet());
 
 // mongoose connection
 mongoose.Promise = global.Promise;
