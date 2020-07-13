@@ -66,4 +66,9 @@ const logRequests = (req, res, next) => {
   next();
 };
 
-export { setupJWT, loginRequired, validate, logRequests };
+const addCSRFToken = (req, res, next) => {
+  res.cookie('XSRF-TOKEN', req.csrfToken());
+  next();
+};
+
+export { setupJWT, loginRequired, validate, logRequests, addCSRFToken };

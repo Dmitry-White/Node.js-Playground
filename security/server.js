@@ -3,9 +3,11 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
+import csurf from 'csurf';
 
 import routes from './src/routes/crmRoutes';
-import { logRequests, setupJWT } from './src/core/middlewares';
+import { addCSRFToken, logRequests, setupJWT } from './src/core/middlewares';
 
 const app = express();
 const PORT = 3000;
@@ -32,11 +34,19 @@ mongoose.connect('mongodb://localhost/CRMdb', {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// cookieparser setup
+app.use(cookieParser());
+
 // Request Logger setup
 app.use(logRequests);
 
 // JWT setup
 app.use(setupJWT);
+
+// csurf setup
+const csrfProtection = csurf({ cookie: true }); // Checks request "XSRF-TOKEN" header against "_csrf" secret for every request with body
+app.use(csrfProtection); // Sets "_csrf" cookie as a secret
+app.use(addCSRFToken); // Generates and adds csrf token to "XSRF-TOKEN" header
 
 routes(app);
 
