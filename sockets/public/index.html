@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+    <title>Sockets</title>
+  </head>
+  <body>
+    Hi
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io('http://localhost:3000');
+      socket.on('message', (data) => {
+        console.log('[io client] message: ', data);
+        socket.emit('another event', { jeremy: "I'm great, thanks!" });
+      });
+    </script>
+  </body>
+</html>
