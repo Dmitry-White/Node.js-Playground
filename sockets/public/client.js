@@ -3,6 +3,7 @@ const messageInput = document.querySelector('#message_input');
 const messageHistory = document.querySelector('#messages_history');
 const incomingMessageTemplate = document.querySelector('#incoming_message');
 const outgoingMessageTemplate = document.querySelector('#outgoing_message');
+const connectionToast = document.querySelector('#connection-toast');
 
 const socket = io(); // eslint-disable-line
 
@@ -58,7 +59,16 @@ const updateMessageHistory = (message) => {
   messageHistory.append(messageContentClone);
 };
 
+const showConnectionToast = () => {
+  const toast = new bootstrap.Toast(connectionToast); // eslint-disable-line
+  toast.show();
+};
+
 const chatLogic = () => {
+  socket.on('connect', () => {
+    console.log('[io client] connect: ', true);
+    showConnectionToast();
+  });
   socket.on('message', (message) => {
     console.log('[io client] message: ', message);
     updateMessageHistory(message);

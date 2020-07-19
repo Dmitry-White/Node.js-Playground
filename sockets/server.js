@@ -18,22 +18,22 @@ const server = app.listen(PORT, () =>
 const io = new Server(server);
 
 io.on('connection', (socket) => {
-  console.log('[io server] User connected!');
+  console.log(`[io server] User ${socket.id} connected!`);
 
-  const message = {
-    id: Math.random(),
-    data: 'hey, how are you?',
-    timestamp: new Date(),
-  };
+  socket.on('message', (chatMessage) => {
+    console.log(`[io server] Message from ${socket.id}: `, chatMessage);
 
-  socket.emit('message', message);
-
-  socket.on('message', (data) => {
-    console.log('[io server] message: ', data);
-    io.emit('message', data);
+    io.emit('message', chatMessage);
   });
 
   socket.on('disconnect', (reason) => {
-    console.log('[io server] User disconnected! Reason: ', reason);
+    console.log(`[io server] User ${socket.id} disconnected! Reason: `, reason);
+
+    const disconnectMessage = {
+      id: Math.random(),
+      data: `User ${socket.id} disconnected`,
+      timestamp: new Date(),
+    };
+    io.emit('message', disconnectMessage);
   });
 });
