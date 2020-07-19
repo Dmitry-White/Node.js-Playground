@@ -100,7 +100,7 @@
           <!-- MESSAGES -->
           <div class="messages_container">
             <!-- HISTORY -->
-            <div class="messages_history">
+            <div id="messages_history" class="messages_history">
               <div class="incoming_message">
                 <div class="incoming_message_img">
                   <img
@@ -111,7 +111,7 @@
                 <div class="received_message">
                   <div class="received_withd_message">
                     <p>Test which is a new approach to have all solutions</p>
-                    <span class="time_date"> 11:01 AM | June 9</span>
+                    <span class="message_timedate"> 11:01 AM | June 9</span>
                   </div>
                 </div>
               </div>
@@ -119,14 +119,15 @@
               <div class="outgoing_message">
                 <div class="sent_message">
                   <p>Test which is a new approach to have all solutions</p>
-                  <span class="time_date"> 11:01 AM | June 9</span>
+                  <span class="message_timedate"> 11:01 AM | June 9</span>
                 </div>
               </div>
             </div>
             <!-- INPUT -->
-            <form class="message_input">
+            <form id="message_form">
               <div class="input-group mb-3">
                 <input
+                  id="message_input"
                   type="text"
                   class="form-control"
                   placeholder="Message..."
@@ -135,7 +136,7 @@
                 />
                 <button
                   class="btn btn-outline-secondary"
-                  type="button"
+                  type="submit"
                   id="button-addon2"
                 >
                   <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
@@ -157,8 +158,8 @@
         </div>
         <div class="received_message">
           <div class="received_withd_message">
-            <p>Test which is a new approach to have all solutions</p>
-            <span class="time_date"> 11:01 AM | June 9</span>
+            <p id="message_body">Test which is a new approach to have all solutions</p>
+            <span class="message_timedate"> 11:01 AM | June 9</span>
           </div>
         </div>
       </div>
@@ -167,8 +168,8 @@
     <template id="outgoing_message">
       <div class="outgoing_message">
         <div class="sent_message">
-          <p>Test which is a new approach to have all solutions</p>
-          <span class="time_date"> 11:01 AM | June 9</span>
+          <p id="message_body">Test which is a new approach to have all solutions</p>
+          <span class="message_timedate"> 11:01 AM | June 9</span>
         </div>
       </div>
     </template>

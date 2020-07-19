@@ -19,8 +19,21 @@ const io = new Server(server);
 
 io.on('connection', (socket) => {
   console.log('[io server] User connected!');
-  socket.emit('message', { manny: 'hey, how are you?' });
-  socket.on('another event', (data) => {
-    console.log('[io server] another event: ', data);
+
+  const message = {
+    id: Math.random(),
+    data: 'hey, how are you?',
+    timestamp: new Date(),
+  };
+
+  socket.emit('message', message);
+
+  socket.on('message', (data) => {
+    console.log('[io server] message: ', data);
+    io.emit('message', data);
+  });
+
+  socket.on('disconnect', (reason) => {
+    console.log('[io server] User disconnected! Reason: ', reason);
   });
 });
