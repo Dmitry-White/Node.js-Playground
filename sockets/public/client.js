@@ -5,7 +5,7 @@ const incomingMessageTemplate = document.querySelector('#incoming_message');
 const outgoingMessageTemplate = document.querySelector('#outgoing_message');
 const connectionToast = document.querySelector('#connection-toast');
 
-const socket = io(); // eslint-disable-line
+const socket = io('/users'); // eslint-disable-line
 
 messageForm.addEventListener('submit', (e) => {
   e.preventDefault();
