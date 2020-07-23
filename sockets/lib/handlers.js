@@ -1,10 +1,12 @@
+import { EVENTS } from '../core/constants';
+
 const messageHandler = (io, socket) => (chatMessage) => {
   console.log(
     `[io server] Message from ${socket.id} in ${io.name}: `,
     chatMessage,
   );
 
-  io.emit('message', chatMessage);
+  io.emit(EVENTS.MESSAGE, chatMessage);
 };
 
 const disconnectHandler = (io, socket) => (reason) => {
@@ -14,11 +16,11 @@ const disconnectHandler = (io, socket) => (reason) => {
   );
 
   const disconnectMessage = {
-    id: Math.random(),
+    id: socket.id,
     data: `User ${socket.id} disconnected`,
     timestamp: new Date(),
   };
-  io.emit('message', disconnectMessage);
+  io.emit(EVENTS.MESSAGE, disconnectMessage);
 };
 
 export { messageHandler, disconnectHandler };

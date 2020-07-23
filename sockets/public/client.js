@@ -1,3 +1,13 @@
+const EVENTS = {
+  CONNECT: 'connect',
+  DISCONNECT: 'disconnect',
+  MESSAGE: 'message',
+};
+
+const NAMESPACES = {
+  USERS: '/users',
+};
+
 const messageForm = document.querySelector('#message_form');
 const messageInput = document.querySelector('#message_input');
 const messageHistory = document.querySelector('#messages_history');
@@ -5,24 +15,10 @@ const incomingMessageTemplate = document.querySelector('#incoming_message');
 const outgoingMessageTemplate = document.querySelector('#outgoing_message');
 const connectionToast = document.querySelector('#connection-toast');
 
-const socket = io('/users'); // eslint-disable-line
-
-messageForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const message = {
-    id: socket.id,
-    data: messageInput.value,
-    timestamp: new Date().toUTCString(),
-  };
-
-  socket.emit('message', message);
-
-  messageInput.value = '';
-});
+const socket = io(NAMESPACES.USERS); // eslint-disable-line
 
 const formatTime = (timestamp) => {
-  const months = [
+  const MONTHS = [
     'January',
     'February',
     'March',
@@ -38,11 +34,13 @@ const formatTime = (timestamp) => {
   ];
   const dateObj = new Date(timestamp);
   return `${dateObj.getHours()}:${dateObj.getMinutes()} | ${
-    months[dateObj.getMonth()]
+    MONTHS[dateObj.getMonth()]
   } ${dateObj.getDate()} ${dateObj.getFullYear()}`;
 };
 
 const updateMessageHistory = (message) => {
+  console.log('[io client] message: ', message);
+
   const messageTemplate =
     socket.id === message.id
       ? outgoingMessageTemplate
@@ -60,19 +58,33 @@ const updateMessageHistory = (message) => {
 };
 
 const showConnectionToast = () => {
+  console.log('[io client] connect: ', true);
+
   const toast = new bootstrap.Toast(connectionToast); // eslint-disable-line
   toast.show();
 };
 
+const sendMessage = (value) => {
+  const message = {
+    id: socket.id,
+    data: value,
+    timestamp: new Date().toUTCString(),
+  };
+
+  socket.emit(EVENTS.MESSAGE, message);
+};
+
+messageForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  sendMessage(messageInput.value);
+
+  messageInput.value = '';
+});
+
 const chatLogic = () => {
-  socket.on('connect', () => {
-    console.log('[io client] connect: ', true);
-    showConnectionToast();
-  });
-  socket.on('message', (message) => {
-    console.log('[io client] message: ', message);
-    updateMessageHistory(message);
-  });
+  socket.on(EVENTS.CONNECT, showConnectionToast);
+  socket.on(EVENTS.MESSAGE, updateMessageHistory);
 };
 
 chatLogic();
