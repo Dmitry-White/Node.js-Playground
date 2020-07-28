@@ -6,7 +6,7 @@ const messageHandler = (io, socket) => (chatMessage) => {
     chatMessage,
   );
 
-  io.emit(EVENTS.MESSAGE, chatMessage);
+  io.in(chatMessage.data.room).emit(EVENTS.MESSAGE, chatMessage);
 };
 
 const disconnectHandler = (io, socket) => (reason) => {
@@ -15,12 +15,31 @@ const disconnectHandler = (io, socket) => (reason) => {
     reason,
   );
 
+  const value = `User ${socket.id} disconnected`;
+
   const disconnectMessage = {
     id: socket.id,
-    data: `User ${socket.id} disconnected`,
+    data: { value },
     timestamp: new Date(),
   };
   io.emit(EVENTS.MESSAGE, disconnectMessage);
 };
 
-export { messageHandler, disconnectHandler };
+const joinHandler = (io, socket) => (event) => {
+  console.log(
+    `[io server] User ${socket.id} in ${io.name} joined ${event.data.room}`,
+  );
+
+  const value = `User ${socket.id} joined`;
+
+  socket.join(event.data.room);
+
+  const joinMessage = {
+    id: socket.id,
+    data: { value },
+    timestamp: new Date(),
+  };
+  io.in(event.data.room).emit(EVENTS.MESSAGE, joinMessage);
+};
+
+export { messageHandler, disconnectHandler, joinHandler };

@@ -2,10 +2,16 @@ const EVENTS = {
   CONNECT: 'connect',
   DISCONNECT: 'disconnect',
   MESSAGE: 'message',
+  JOIN: 'join',
 };
 
 const NAMESPACES = {
   USERS: '/users',
+};
+
+const ROOMS = {
+  JAVASCRIPT: 'javascript',
+  REACT: 'react',
 };
 
 const messageForm = document.querySelector('#message_form');
@@ -38,6 +44,13 @@ const formatTime = (timestamp) => {
   } ${dateObj.getDate()} ${dateObj.getFullYear()}`;
 };
 
+const showConnectionToast = () => {
+  console.log('[io client] connect: ', true);
+
+  const toast = new bootstrap.Toast(connectionToast); // eslint-disable-line
+  toast.show();
+};
+
 const updateMessageHistory = (message) => {
   console.log('[io client] message: ', message);
 
@@ -51,39 +64,45 @@ const updateMessageHistory = (message) => {
   const messageTimedate =
     messageContentClone.querySelector('.message_timedate');
 
-  messageBody.textContent = message.data;
+  messageBody.textContent = message.data.value;
   messageTimedate.textContent = formatTime(message.timestamp);
 
   messageHistory.append(messageContentClone);
 };
 
-const showConnectionToast = () => {
-  console.log('[io client] connect: ', true);
-
-  const toast = new bootstrap.Toast(connectionToast); // eslint-disable-line
-  toast.show();
-};
-
-const sendMessage = (value) => {
+const sendMessage = (room, value) => {
   const message = {
     id: socket.id,
-    data: value,
+    data: { room, value },
     timestamp: new Date().toUTCString(),
   };
 
   socket.emit(EVENTS.MESSAGE, message);
 };
 
+const sendJoin = (room) => {
+  const message = {
+    id: socket.id,
+    data: { room },
+    timestamp: new Date().toUTCString(),
+  };
+
+  socket.emit(EVENTS.JOIN, message);
+};
+
 messageForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  sendMessage(messageInput.value);
+  sendMessage(ROOMS.JAVASCRIPT, messageInput.value);
 
   messageInput.value = '';
 });
 
 const chatLogic = () => {
-  socket.on(EVENTS.CONNECT, showConnectionToast);
+  socket.on(EVENTS.CONNECT, () => {
+    showConnectionToast();
+    sendJoin(ROOMS.JAVASCRIPT);
+  });
   socket.on(EVENTS.MESSAGE, updateMessageHistory);
 };
 
