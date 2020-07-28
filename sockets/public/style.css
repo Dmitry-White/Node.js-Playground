@@ -47,46 +47,54 @@ img {
   background: none;
 }
 
-.chat_ib h5 {
-  font-size: 15px;
-  color: #464646;
-  margin: 0 0 8px 0;
-}
-.chat_ib h5 span {
-  font-size: 13px;
-  float: right;
-}
-.chat_ib p {
-  font-size: 14px;
-  color: #989898;
-  margin: auto;
-}
-.chat_img {
+.chat_img_wrapper {
   float: left;
   width: 11%;
-}
-.chat_ib {
-  float: left;
-  padding: 0 0 0 15px;
-  width: 88%;
 }
 
 .chat_people {
   overflow: hidden;
   clear: both;
 }
+
+
+.chat_ib {
+  float: left;
+  padding: 0 0 0 15px;
+  width: 88%;
+}
+.chat_ib .chat_name {
+  font-size: 15px;
+  color: #464646;
+  margin: 0 0 8px 0;
+}
+.chat_ib .chat_date {
+  font-size: 13px;
+  float: right;
+}
+.chat_ib .chat_text {
+  font-size: 14px;
+  color: #989898;
+  margin: auto;
+}
+
 .chat_room {
   border-bottom: 1px solid #c4c4c4;
   margin: 0;
   padding: 18px 16px 10px;
+  cursor: pointer;
 }
-.chats_history {
+.chat_rooms {
   height: 550px;
   overflow-y: scroll;
 }
 
-.active_chat {
+.chat_room:hover {
   background: #ebebeb;
+}
+
+.active_chat {
+  background: #e2e2e2;
 }
 
 .chat_app {

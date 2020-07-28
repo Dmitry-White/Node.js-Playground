@@ -59,68 +59,7 @@
             </div>
 
             <!-- CHAT ROOMS -->
-            <div class="chats_history">
-              <div class="chat_room active_chat">
-                <div class="chat_people">
-                  <div class="chat_img">
-                    <img
-                      src="https://ptetutorials.com/images/user-profile.png"
-                      alt="sunil"
-                    />
-                  </div>
-                  <div class="chat_ib">
-                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                    <p>
-                      Test, which is a new approach to have all solutions
-                      astrology under one roof.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="chat_room">
-                <div class="chat_people">
-                  <div class="chat_img">
-                    <img
-                      src="https://ptetutorials.com/images/user-profile.png"
-                      alt="sunil"
-                    />
-                  </div>
-                  <div class="chat_ib">
-                    <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                    <p>
-                      Test, which is a new approach to have all solutions
-                      astrology under one roof.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- MESSAGES -->
-          <div class="messages_container">
-            <!-- HISTORY -->
-            <div id="messages_history" class="messages_history"></div>
-            <!-- INPUT -->
-            <form id="message_form">
-              <div class="input-group mb-3">
-                <input
-                  id="message_input"
-                  type="text"
-                  class="form-control"
-                  placeholder="Message..."
-                  aria-label="Message..."
-                  aria-describedby="button-addon2"
-                />
-                <button
-                  class="btn btn-outline-secondary"
-                  type="submit"
-                  id="button-addon2"
-                >
-                  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-                </button>
-              </div>
-            </form>
+            <div class="chat_rooms"></div>
           </div>
         </div>
       </div>
@@ -180,20 +119,44 @@
     <template id="chat_room">
       <div class="chat_room">
         <div class="chat_people">
-          <div class="chat_img">
-            <img
-              src="https://ptetutorials.com/images/user-profile.png"
-              alt="sunil"
-            />
+          <div class="chat_img_wrapper">
+            <img class="chat_img" />
           </div>
           <div class="chat_ib">
-            <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-            <p>
-              Test, which is a new approach to have all solutions astrology
-              under one roof.
+            <h5 class="chat_name"></h5>
+            <span class="chat_date">Dec 25</span>
+            <p class="chat_text">
+              Test Message
             </p>
           </div>
         </div>
+      </div>
+    </template>
+
+    <template id="messages_container">
+      <div class="messages_container">
+        <!-- HISTORY -->
+        <div id="messages_history" class="messages_history"></div>
+        <!-- INPUT -->
+        <form id="message_form">
+          <div class="input-group mb-3">
+            <input
+              id="message_input"
+              type="text"
+              class="form-control"
+              placeholder="Message..."
+              aria-label="Message..."
+              aria-describedby="button-addon2"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="submit"
+              id="button-addon2"
+            >
+              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+            </button>
+          </div>
+        </form>
       </div>
     </template>
 
