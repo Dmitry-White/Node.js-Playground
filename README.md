@@ -7,3 +7,5 @@
 3. [Node.js: Testing and Code Quality](https://www.linkedin.com/learning/node-js-testing-and-code-quality)
 
 4. [Node.js: Security](https://www.linkedin.com/learning/node-js-security)
+
+5. [Node.js: Sockets](https://www.linkedin.com/learning/node-js-real-time-web-with-socket-io)
