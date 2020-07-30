@@ -1,1 +1,4 @@
-SELECT company, first_name, quiz_points FROM people;
+SELECT company,
+    first_name,
+    quiz_points
+FROM people;
