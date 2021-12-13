@@ -28,7 +28,7 @@
     "morgan": "~1.8.1",
     "node-env": "^0.1.6",
     "pug": "^2.0.0-rc.2",
-    "serve-favicon": "~2.4.2",
+    "serve-favicon": "~2.5.0",
     "sqlite": "^2.8.0"
   },
   "devDependencies": {
