@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "basic-auth": "^1.1.0",
-    "body-parser": "~1.17.1",
+    "body-parser": "~1.19.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
-    "express": "~4.15.2",
+    "express": "~4.17.1",
     "joi": "^10.6.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
