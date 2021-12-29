@@ -15,7 +15,7 @@
     "debug": "~2.6.3",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "mongoose": "^5.11.11",
+    "mongoose": "^5.13.13",
     "mysql2": "^2.2.5",
     "pug": "^3.0.1",
     "redis": "^3.1.1",
