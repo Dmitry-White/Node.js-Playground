@@ -29,7 +29,7 @@
     "node-env": "^0.1.8",
     "pug": "^3.0.2",
     "serve-favicon": "~2.5.0",
-    "sqlite": "^2.8.0"
+    "sqlite": "^4.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4",
