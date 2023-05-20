@@ -14,7 +14,7 @@
     "axios": "^0.27.2",
     "mongodb": "^4.15.0",
     "mysql2": "^2.3.3",
-    "redis": "^4.6.5"
+    "redis": "^4.6.6"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
