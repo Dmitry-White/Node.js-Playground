@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
-    "mongodb": "^4.17.0",
+    "mongodb": "^4.17.2",
     "mysql2": "^2.3.3",
     "redis": "^4.6.7"
   },
