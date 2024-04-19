@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^0.28.1",
     "mongodb": "^4.17.0",
     "mysql2": "^2.3.3",
     "redis": "^4.6.7"
